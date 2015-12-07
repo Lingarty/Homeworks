@@ -22,7 +22,7 @@ begin
     readln(a[i]);
 end;
 
-function isPeriodicF(a: mySequence; n: integer; k: integer): boolean;
+function isPeriodicF(a: mySequence; n: integer; var k: integer): boolean;
 var
   i, c {если в каком-то месте правило периодичности нарушится, с <> n - k}: integer;
   b: boolean;
