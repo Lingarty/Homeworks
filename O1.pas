@@ -1,7 +1,7 @@
 program O1;
 
 //Статья на хабре про сортировки: http://habrahabr.ru/post/204600/
-//задание: требуется отсортировать выбором массив
+//задание: требуется отсортировать обменом массив
 //Здесь: глупая, пузырьковая, шейкерная сортировки, чёт-нечёт, расчёска
 
 const
@@ -13,8 +13,7 @@ type
 
 var
   m: massive;
-  l: integer;
-
+  
 procedure generateMas (var m: massive);
 var
   i: integer;
@@ -81,12 +80,12 @@ begin
     end;
 end;
 
-procedure oddEvenSort(var m: massive); //Сортировка чёт-нечёт, не работает
+{procedure oddEvenSort(var m: massive); //Сортировка чёт-нечёт, не работает
 var
-  i, v {для смены мест}, l: integer;
+  i, v {для смены мест}, l, w{чтоб узнать, выолнялся сейчас цикл или нет}: integer;
   flag, c{для проверки чётности}: boolean;
 begin
-  flag := true;
+  flag := false;
   if (nmax mod 2 = 0) then c := true 
     else c := false;
   if c then 
@@ -100,6 +99,7 @@ begin
                 m[i] := m[i + 2];
                 m[i + 2] := v;
                 flag := false;
+                inc(w);
               end;
           for i := 2 to nmax do
             if m[i] > m [i + 2] then 
@@ -108,36 +108,20 @@ begin
                 m[i] := m[i + 2];
                 m[i + 2] := v;
                 flag := false;
+                inc(w);
               end;
+          if w = 0 then 
+            begin
+              flag := true;
+              w := 0;
+            end;
         end;
-      end
-    else
-      begin
-        while (flag = false) do
-        begin
-          for i := 1 to nmax do
-            if m[i] > m [i + 2] then 
-              begin
-                v := m[i];
-                m[i] := m[i + 2];
-                m[i + 2] := v;
-                flag := false;
-              end;
-          for i := 2 to nmax - 1 do
-            if m[i] > m [i + 2] then 
-              begin
-                v := m[i];
-                m[i] := m[i + 2];
-                m[i + 2] := v;
-                flag := false;
-              end;
-        end;
+      end;
       
       for l := 1 to nmax do
         write (m[l], ' ');
       writeln();
-      end;
-end;
+end;}
 
 procedure combSort(var m: massive); //сортировка расчёской
 var
