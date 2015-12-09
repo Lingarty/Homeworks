@@ -2,9 +2,7 @@ program O1;
 
 //Статья на хабре про сортировки: http://habrahabr.ru/post/204600/
 //задание: требуется отсортировать выбором массив
-//Здесь: глупая, пузырьковая, шейкерная сортировки, /чёт-нечёт, расчёска
-
-//прога ещё не готова
+//Здесь: глупая, пузырьковая, шейкерная сортировки, чёт-нечёт, расчёска
 
 const
   nmax = 5;
@@ -83,17 +81,17 @@ begin
     end;
 end;
 
-procedure oddEvenSort(var m: massive); //Сортировка чёт-нечёт, вообще байда какая-то
+procedure oddEvenSort(var m: massive); //Сортировка чёт-нечёт, не работает
 var
-  i: integer;
-  flag, c{для проверки чётности, v {для смены мест}, l: boolean;
+  i, v {для смены мест}, l: integer;
+  flag, c{для проверки чётности}: boolean;
 begin
   flag := true;
   if (nmax mod 2 = 0) then c := true 
     else c := false;
   if c then 
     begin
-      do
+      while (flag = false) do 
         begin
           for i := 1 to nmax - 1 do
             if m[i] > m [i + 2] then 
@@ -112,10 +110,10 @@ begin
                 flag := false;
               end;
         end;
-      while (flag = false)
+      end
     else
       begin
-        do
+        while (flag = false) do
         begin
           for i := 1 to nmax do
             if m[i] > m [i + 2] then 
@@ -134,7 +132,7 @@ begin
                 flag := false;
               end;
         end;
-      while (flag = false)
+      
       for l := 1 to nmax do
         write (m[l], ' ');
       writeln();
@@ -143,9 +141,9 @@ end;
 
 procedure combSort(var m: massive); //сортировка расчёской
 var
-  i, s {разрыв между проверяемыми элементами}, v, l: integer;
+  i, s {разрыв между проверяемыми элементами}, v: integer;
 begin
-  s := round(nmax / f); //тут начинается магия, хочет работает, не хочет, не работает. Не знаю, почему
+  s := round(nmax / f);
   while s <> 1 do
     begin
       for i := 1 to nmax - s do
@@ -156,10 +154,8 @@ begin
             m[i + s] := v;
           end;
       s := s - 1;
-      for l := 1 to nmax do
-        write (m[l], ' ');
-      writeln();
     end;
+    bubbleSort(m);
 end;
 
 procedure printMas(m: massive);
@@ -199,13 +195,13 @@ BEGIN
   printMas(m);
   writeln ('');
   
-  writeln ('Исходный массив:');
+  {writeln ('Исходный массив:');
   generateMas(m);
   printMas(m);
   writeln ('Массив после сортировки "чёт-нечёт":');
   oddEvenSort(m);
   printMas(m);
-  writeln ('');
+  writeln ('');}
   
   writeln ('Исходный массив:');
   generateMas(m);
