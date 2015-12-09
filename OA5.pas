@@ -1,4 +1,4 @@
-program OA4;
+program OA5;
 
 const
   nmax = 10;
@@ -18,7 +18,7 @@ begin
     readln (a[i]);
 end;
 
-procedure unionOfElements(var a1, a2, a3: massive; var n, m, k: integer);
+procedure intersectionOfElements(var a1, a2, a3: massive; var n, m, k: integer);
 var
   i, j, q: integer;
 begin
@@ -52,7 +52,7 @@ BEGIN
   readln(m);
   writeln ('Введите элементы второго массива (по возрастанию)');
   readMassive(a2, m);
-  write ('Объединение массивов: ');
-  unionOfElements(a1, a2, a3, n, m, k);
+  write ('Пересечение массивов: ');
+  intersectionOfElements(a1, a2, a3, n, m, k);
   printMassive(a3, k);  
 END.
