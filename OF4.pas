@@ -19,20 +19,6 @@ begin
     end;
 end;
 
-procedure writelnFile(f: numbers; n: integer);
-var
-  i: integer;
-  r: real;
-begin
-  reset(f);
-  for i := 1 to n do
-    begin
-      read(f, r);
-      write (r, ' ');
-    end;
-  writeln();
-end;
-
 procedure intersectionOfElements(var f1, f2, f3: numbers; var n, m, k: integer);
 var
   i: integer;
@@ -73,16 +59,13 @@ BEGIN
   writeln ('Введите длину первого массива.');
   readln(n);
   writeln ('Введите элементы первого массива (по возрастанию)');
-  writeSequenseInFile(f1, n);
   writelnFile(f1, n);
   writeln ('Введите длину второго массива.');
   readln(m);
   writeln ('Введите элементы второго массива (по возрастанию)');
   writeSequenseInFile(f2, m);
-  writelnFile(f2, m);
   intersectionOfElements(f1, f2, f3, n, m, k);
   writeln ('Пересечение последовательностей записано в файл OF4-3.txt');
-  writelnFile(f3, k);
   
   close(f1); 
   close(f2);
