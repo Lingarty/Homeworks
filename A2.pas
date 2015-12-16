@@ -11,9 +11,9 @@ type
 var
   a: mySequence;
   n, period: integer;
-  isPeriodic: boolean;
+  seq: boolean;
   
-procedure reading(a: mySequence; n: integer);
+procedure reading(var a: mySequence; var n: integer);
 var 
   i: integer;
 begin
@@ -24,12 +24,13 @@ begin
     readln(a[i]);
 end;
 
-function isPeriodicF(a: mySequence; n: integer; var k: integer): boolean;
+function isPeriodicF(a: mySequence; n: integer; var period: integer): boolean;
 var
-  i, c {если в каком-то месте правило периодичности нарушится, с <> n - k}: integer;
+  i, k, c {если в каком-то месте правило периодичности нарушится, с <> n - k}: integer;
   b: boolean;
 begin
-  for k := 1 to (n div 2) do
+  k := 1;
+  while k <= (n div 2) do
     begin
       for i := 1 to (n - k) do
         if (a[i] = a[i + k]) then inc(c);
@@ -37,20 +38,25 @@ begin
         begin
           period := k;
           b := true;
+          break;
         end
-        else b := false;
+        else 
+          begin
+            b := false;
+            inc(k);
+          end;
     end;
     isPeriodicF := b;
 end;
 
 procedure writing(a: boolean; b: integer);
 begin
-  if a then writeln ('Последовательность периодична, и её период равен', b)
+  if a then writeln ('Последовательность периодична, и её период T = ', b)
     else writeln ('Последовательность не периодична');
 end;
 
 begin
   reading(a, n);
-  isPeriodic := isPeriodicF(a, n, period);
-  writing(isPeriodic, period);
+  seq:= isPeriodicF(a, n, period);
+  writing(seq, period);
 end.
