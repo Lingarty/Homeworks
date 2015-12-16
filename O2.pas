@@ -24,7 +24,7 @@ procedure maxSort(var a: massive);
 var 
   i, k, max, j {для запоминания номера max}, v{для смены мест элементов}: integer;
 begin
-  for k := 0 to nmax - 1do
+  for k := 0 to nmax - 1 do
     begin
       max := -200;
       for i := 1 to nmax - k do
