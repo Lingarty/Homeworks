@@ -1,8 +1,8 @@
 program O1;
 
 //Статья на хабре про сортировки: http://habrahabr.ru/post/204600/
-//задание: требуется отсортировать обменом массив
-//Здесь: глупая, пузырьковая, шейкерная сортировки, чёт-нечёт, расчёска
+//задание: требуется отсортировать обменом массив 
+//(скорее всего пузырьком,но хотелось попробовать всё, что есть в статье)
 
 const
   nmax = 5;
@@ -23,6 +23,7 @@ begin
     m[i] := random (100) - 50;
 end;
 
+
 procedure stupidSort(var a: massive); 
 var
   i, k, v {Ведро для смены мест}: integer;
@@ -40,6 +41,7 @@ begin
       end;
 end;
 
+
 procedure bubbleSort(var m: massive);
 var
   k{коэффициент, "укорачивающий" массив}, i,
@@ -56,6 +58,7 @@ begin
           end;
     end;
 end;
+
 
 procedure shakeSort(var m: massive);
 var
@@ -80,48 +83,77 @@ begin
     end;
 end;
 
-{procedure oddEvenSort(var m: massive); //Сортировка чёт-нечёт, не работает
-var
-  i, v {для смены мест}, l, w{чтоб узнать, выолнялся сейчас цикл или нет}: integer;
-  flag, c{для проверки чётности}: boolean;
+
+{тут начинаются вспомогательные процедуры для чёт/нечёт}
+
+function isEven: boolean; //кол-во элементов чётно?
 begin
-  flag := false;
-  if (nmax mod 2 = 0) then c := true 
-    else c := false;
-  if c then 
+  if nmax mod 2 = 0 then result := true
+    else result := false;
+end;
+
+procedure evenStep(var m: massive; var s: integer); //чётный шаг
+var
+  k {нечётный шаг}, v {для перестановки}, n {номер последнего элемента в поиске}: integer;
+  b: boolean;
+begin
+  k := 2;
+  b := isEven;
+  if b then n := nmax - 2
+    else n := nmax - 1;
+  while (k <= n) do
     begin
-      while (flag = false) do 
+      if m[k] > m[k + 1] then
         begin
-          for i := 1 to nmax - 1 do
-            if m[i] > m [i + 2] then 
-              begin
-                v := m[i];
-                m[i] := m[i + 2];
-                m[i + 2] := v;
-                flag := false;
-                inc(w);
-              end;
-          for i := 2 to nmax do
-            if m[i] > m [i + 2] then 
-              begin
-                v := m[i];
-                m[i] := m[i + 2];
-                m[i + 2] := v;
-                flag := false;
-                inc(w);
-              end;
-          if w = 0 then 
-            begin
-              flag := true;
-              w := 0;
-            end;
+          v := m[k];
+          m[k] := m[k + 1];
+          m[k + 1] := v;
+          inc(s);
         end;
-      end;
-      
-      for l := 1 to nmax do
-        write (m[l], ' ');
-      writeln();
-end;}
+        k := k + 2;
+    end;
+end;
+
+procedure oddStep(var m: massive; var s: integer); //нечётный шаг
+var
+  k {нечётный шаг}, v {для перестановки}, n {номер последнего элемента в поиске}: integer;
+  b: boolean;
+begin
+  k := 1;
+  b := isEven;
+  if b then n := nmax - 1
+    else n := nmax - 2;
+  while (k <= n) do
+    begin
+      if m[k] > m[k + 1] then
+        begin
+          v := m[k];
+          m[k] := m[k + 1];
+          m[k + 1] := v;
+          inc(s);
+        end;
+      k := k + 2;
+    end;
+end;
+
+procedure oddEvenSort(var m: massive); //Сортировка чёт-нечёт
+var
+  s1, s2 {сколько перестановок за нечёт/чёт цикл}: integer;
+  flag: boolean;
+begin
+  while (flag = false) do
+    begin
+      oddStep(m, s1);
+      evenStep(m, s2);
+      if (s1 = 0) and (s2 = 0) then flag := true
+        else 
+          begin
+            s1 := 0;
+            s2 := 0;
+          end;
+    end;
+end;
+
 
 procedure combSort(var m: massive); //сортировка расчёской
 var
@@ -142,6 +174,7 @@ begin
     bubbleSort(m);
 end;
 
+
 procedure printMas(m: massive);
 var
   i: integer;
@@ -150,6 +183,7 @@ begin
     write (m[i], ' ');
   writeln();
 end;
+    
     
 BEGIN
   writeln ('Демонстрация работы различных алгоритмов сортировки выбором.');
@@ -179,13 +213,13 @@ BEGIN
   printMas(m);
   writeln ('');
   
-  {writeln ('Исходный массив:');
+  writeln ('Исходный массив:');
   generateMas(m);
   printMas(m);
   writeln ('Массив после сортировки "чёт-нечёт":');
   oddEvenSort(m);
   printMas(m);
-  writeln ('');}
+  writeln ('');
   
   writeln ('Исходный массив:');
   generateMas(m);
