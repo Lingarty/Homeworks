@@ -15,7 +15,7 @@ procedure writingFile(var myFile: text; a: mas);
 var
   i: integer;
 begin
-  assign(myFile, 'C:\Users\Альбина\Documents\GitHub\Homeworks\Output.txt');
+  assign(myFile, 'C:\Users\Альбина\Documents\GitHub\Homeworks\OutputF3.txt');
   rewrite(myFile);
   for i := 1 to nmax do
     begin
