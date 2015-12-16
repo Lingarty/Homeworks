@@ -14,8 +14,7 @@ function isNumber(simbol: char): boolean;
 var 
   flag: boolean;
 begin
-  if (integer(simbol) < 58) and (integer(simbol) > 47) then flag := true
-    else flag := false;
+  if (integer(simbol) < 58) and (integer(simbol) > 47) then flag := true;
   isNumber := flag;
 end;
 
