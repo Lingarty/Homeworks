@@ -1,10 +1,5 @@
 program A1;
 
-//Задача: реализовать алгоритм сложения "столбиком", т.е.
-//найти запись суммы с по символьным записям слагаемых a,b
-//•	В тип integer разрешено переводить лишь цифры, не записи в целом! 
-
-
 const
   nmax = 1000;
 
@@ -19,66 +14,70 @@ var
   d: sum1; //Сумма - строка
   n{длина a}, m{длина b}, l{длина c}: integer;
 
-procedure readingData(var a, b: number; n, m: integer);
+procedure input(var a: number; var n: integer);
 var
-  i, j: integer;
+  i: integer;
   k: char; //Для считывания посимвольно
 begin
-  writeln('Введите первое число, в конце ввода поставьте точку'); //Блок ввода
   for i := 1 to nmax - 1 do
-  begin
-    read(k);
-    if (k = '.') then break
-        else 
     begin
-      a[i] := k;
-      inc(n);
+      read(k);
+      if (k = '.') then break
+        else 
+          begin
+            a[i] := k;
+            inc(n);
+          end;
     end;
-  end;
   readln();
-  writeln('Введите второе число, в конце ввода поставьте точку');
-  for j := 1 to nmax - 1 do
-  begin
-    read(k);
-    if (k = '.') then break
-        else 
-    begin
-      b[j] := k;
-      inc(m);
-    end;
-  end;
 end;
 
-function maxLength(var n, m: integer): integer;
+function maxLength(var n, m: integer): integer; 
+//задаёт максимальную длину суммы
 var
   l: integer;
 begin
-  if (m > n) then l := m + 1 //определяем максимальную длину суммы
+  if (m > n) then l := m + 1 
   else l := n + 1;
   maxLength := l;
 end;
 
-procedure calculating(var n, m, l: integer; a, b: number; c: sum2; d: sum1);
+procedure convertCharToInt(var i, j, x, y: integer; var a, b: number);
+//Перевод символов в цифры
+begin
+  if (i <> 0) then 
+    begin
+      x := ord(a[i]) - 48;
+      dec(i);
+    end
+    else x := 0;
+      if (j <> 0) then
+        begin
+          y := ord(b[j]) - 48;
+          dec(j);
+        end
+        else y := 0; 
+end;
+
+procedure convertIntToChar(var l: integer; var c: sum2; var d: sum1);
+//Перевод числа в строку
+var
+  t: integer;
+begin
+  for t := 1 to l do 
+    d[t] := chr(c[t] + 48);
+end;
+
+procedure calculating(var n, m, l: integer; a, b: number; var c: sum2; var d: sum1);
 var
   i, j, t, {индексы массивов}
   x, y{цифры, которые складываем в данный момент}: integer;
 begin
   i := n; 
   j := m;
-  for t := l downto 2 do //Блок вычислений
+  for t := l downto 2 do
   begin
-    if (i <> 0) then //Переводим символы в цифры
-    begin
-      x := ord(a[i]) - 48;
-      dec(i);
-    end
-    else x := 0;
-    if (j <> 0) then
-    begin
-      y := ord(b[j]) - 48;
-      dec(j);
-    end
-    else y := 0;    
+    convertCharToInt(i, j, x, y, a, b);
     if (x + y < 10) then c[t] := c[t] + x + y //Проводим вычисления 
         else 
     begin
@@ -86,8 +85,7 @@ begin
       c[t] := c[t] + ((x + y) mod 10);
     end;
   end;
-  for t := 1 to l do //Перевод числа в строку
-    d[t] := chr(c[t] + 48);
+  convertIntToChar(l, c, d);
 end;
 
 procedure showResult(d: sum1; l: integer);
@@ -104,7 +102,10 @@ begin
 end;
 
 begin
-  readingData(a, b, n, m);
+  writeln('Введите первое число, в конце ввода поставьте точку');
+  input(a, n);
+  writeln('Введите второе число, в конце ввода поставьте точку');
+  input(b, m);
   l := maxLength(n, m);
   calculating(n, m, l, a, b, c, d);
   showResult(d, l);
