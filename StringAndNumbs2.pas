@@ -16,7 +16,7 @@ procedure reading (var a: massive);
 var
   i: integer;
 begin
-  writeln ('Введите набор символов');
+  writeln ('Введите ', nmax, '-значный набор символов');
   for i := 1 to nmax do
     read(a[i]);
 end;
@@ -26,10 +26,10 @@ var
   flag: array [1..nmax] of boolean;
   i, q: integer;
 begin
-  //допустим, все символы числа
+  //допустим, все символы - числа
   for i := 1 to nmax do
     flag[i] := true;
-  //если это не так, для первого символа условие изменится
+  //если это не так, условие изменится
   for i := 1 to nmax do
     if (integer(a[i]) > 58) or (integer(a[i]) < 47) then 
       begin
