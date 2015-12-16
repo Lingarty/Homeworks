@@ -42,9 +42,14 @@ begin
       else isMagic := true;
 end;
 
+procedure writing(square: boolean);
+begin
+  if square then writeln ('Введённая матрица является магическим квадратом')
+    else writeln ('Введённая матрица не является магическим квадратом')
+end;
+
 BEGIN
   reading(m);
   square := isMagic(m);
-  if square then writeln ('Введённая матрица является магическим квадратом')
-    else writeln ('Введённая матрица не является магическим квадратом')
+  writing(square);
 END.
