@@ -1,4 +1,4 @@
-program Task_4;
+program intersection;
 
 const
   nmax = 50;
@@ -7,11 +7,14 @@ type
   mas = array [1..nmax] of integer;
 
 var 
-  i, j, k, {Индексы} n, m, l,{Длины массивов} v {Ведро для сортировки}, x, q: byte;
+  n, m, l{Длины массивов}: byte;
   a, b, c: mas;
 
+procedure input(var n, m: byte; var a, b: mas);
+var
+  i: integer;
 begin
-  writeln ('Введите длину первого массива (максимум 50 элементов)');  //Блок считывания данных
+  writeln ('Введите длину первого массива (максимум 50 элементов)');
   readln (n);
   writeln ('Введите длину второго массива (максимум 50 элементов)');
   readln (m);
@@ -19,10 +22,15 @@ begin
   for i := 1 to n do 
     readln (a[i]);
   writeln ('Введите элементы второго массива');
-  for j := 1 to m do 
-    readln (b[j]);
-    
-  for k := 1 to (n - 1) do //Блок сортировки массивов
+  for i := 1 to m do 
+    readln (b[i]);
+end;
+
+procedure bubbleSort (var a: mas; n: integer);
+var
+  i, k, v: integer;
+begin
+  for k := 1 to (n - 1) do 
     for i := 1 to (n - 1) do
       if (a[i] > a[i + 1]) then 
         begin
@@ -30,30 +38,24 @@ begin
           a[i] := a[i + 1];
           a[i + 1] := v;
         end;
-  
-  for k := 1 to (m - 1) do 
-    for j := 1 to (m - 1) do
-      if (b[j] > b[j + 1]) then 
-        begin
-          v := b[j];
-          b[j] := b[j + 1];
-          b[j + 1] := v;
-        end;
-  
-  l := 0; //Длина массива-ответа
-  k := 1; //Счётчик массива-ответа
-  j := 1; //Индекс для второго массива
-  x := 1; //Индекс для первого массива (как i)
-  q := 0; //Считает,сколько раз увеличивался х
+end;
+
+procedure findEqual (var a, b, c: mas; var l: byte);
+var
+  i, j, k, q {Считает,сколько раз увеличивался х}, x {Индекс для первого массива}: byte;
+begin
+  k := 1; 
+  j := 1; 
+  x := 1; 
   
   for i := 1 to n*m do
     begin
       if (a[x] = b[j]) then
         begin
           c[k] := a[x];
-          inc(k);
           inc(l);
-          inc(x); inc(q);
+          inc(x); 
+          inc(q);
         end
       else 
         begin
@@ -62,12 +64,26 @@ begin
       if (j = m + 1) then
         begin
           j := 1;
-          inc(x); inc(q);
+          inc(x); 
+          inc(q);
         end;
         if (q = 5) then break;
     end;
-  
-  writeln ('Числа, которые содержатся в обоих массивах:');  //Вывод на экран
-  for k:= 1 to l do
-    write (c[k], ', ');
+end;
+
+procedure output(c: mas; l: byte);
+var
+  i: byte;
+begin
+  writeln ('Числа, которые содержатся в обоих массивах:');
+  for i := 1 to l do
+    write (c[i], ' ');
+end;
+
+begin
+  input(n, m, a, b);
+  bubbleSort(a, n);
+  bubbleSort(b, m);
+  findEqual(a, b, c, l);
+  output(c, l);
 end.
