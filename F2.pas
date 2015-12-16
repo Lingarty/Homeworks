@@ -8,7 +8,7 @@ function sumNumbers(f: text): integer;
 var
   sum, num: integer;
 begin
-  assign(f, 'C:\Users\Альбина\Documents\GitHub\Homeworks\input.txt');
+  assign(f, 'C:\Users\Альбина\Documents\GitHub\Homeworks\inputF2.txt');
   reset(f);
   while not eof(f) do
     begin
