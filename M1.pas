@@ -5,6 +5,9 @@ const
   
 type 
   matrix = array [1..n, 1..n] of integer;
+  //следующие типы нужны для saddlePoints, их описание там
+  line = array [1..n] of integer;
+  column = array [1..n] of integer;
 
 var 
   m: matrix;
@@ -19,12 +22,18 @@ begin
         readln (a[i][j]);
 end;
 
-procedure saddlePoints (a: matrix);
+procedure writing(maxLine, minline: line; maxColumn, minColumn: column);
+var
+  i, j: integer;
+begin
+  writeln ('Седловые точки:'); 
+    for i := 1 to n do
+      for j := 1 to n do
+        if (minLine[i] = maxColumn[j]) or (maxLine[i] = minColumn[j]) then
+          writeln('Элемент ', m[i ,j], ', расположенный в [', i, ';', j, ']');
+end;
 
-type
-  line = array [1..n] of integer;
-  column = array [1..n] of integer;
-  
+procedure saddlePoints (a: matrix);
 var
   i, j: integer;
   maxLine, minline: line; //нужны для минимумов и максимумов строк
@@ -56,12 +65,7 @@ begin
       if m[i, j] > maxColumn[j] then
         maxColumn[j] := m[i, j];
     end;
-    
-    writeln ('Седловые точки:');  //Выводим результат
-    for i := 1 to n do
-      for j := 1 to n do
-        if (minLine[i] = maxColumn[j]) or (maxLine[i] = minColumn[j]) then
-          writeln('Элемент ', m[i ,j], ', расположенный в [', i, ';', j, ']');
+  writing(maxLine, minline, maxColumn, minColumn);
 end;
 
 BEGIN
