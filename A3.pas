@@ -10,11 +10,11 @@ var
   a: mas;
   n, l: integer;
   
-procedure reading(var a: mas; n: integer);
+procedure reading(var a: mas; var n: integer);
 var 
   i: integer;
 begin
-  writeln ('Введите последовательность'); //Ввод последовательности
+  writeln ('Введите последовательность, 0 - конец ввода');
   for i := 1 to nmax do
     begin
       readln (a[i]);
@@ -23,11 +23,12 @@ begin
     end;
 end;
 
-procedure searching(var a: mas; n, l: integer);
+procedure searching(var a: mas; var n, l: integer);
 var
-  i, k: integer;
+  i, k {длина текущей ступеньки}: integer;
 begin
-  for i := 1 to n - 1 do //Поиск наибольшей ступеньки
+  k := 1;
+  for i := 1 to n - 1 do
     if (a[i] < a[i + 1]) then inc(k)
       else 
         if (l < k) then
@@ -40,11 +41,11 @@ end;
 
 procedure showLength(l: integer);
 begin
-  writeln ('Длина наибольшей ступеньки равна ', l); //Вывод длины
+  writeln ('Длина наибольшей ступеньки равна ', l);
 end;
 
-begin
+BEGIN
   reading(a, n);
   searching(a, n, l);
   showLength(l);
-end.
+END.
