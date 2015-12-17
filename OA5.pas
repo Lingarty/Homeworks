@@ -30,7 +30,7 @@ begin
         end;
 end;
 
-function length(var n, m: integer): integer; //длина массива-результата
+function length(var n, m: integer): integer; //начальная длина массива-результата
 begin
   if n > m then length := n
     else length := m;
