@@ -7,20 +7,20 @@ type
   massive = array [1..nmax] of real;
 
 var
-  m: massive;
-  grail, x: integer;
-  b: boolean;
+  heapOfSocks: massive;
+  sock, position: integer;
+  thisSock: boolean;
   
-procedure generateMas (var m: massive);
+procedure generateMas (var heapOfSocks: massive);
 var
   i: integer;
 begin
   randomize;
   for i := 1 to nmax do
-    m[i] := random (100) - 50;
+    heapOfSocks[i] := random (100) - 50;
 end;
 
-procedure shakeSort(var m: massive);
+procedure shakeSort(var heapOfSocks: massive);
 var
   i, j, k: integer;
   v: real;
@@ -28,23 +28,23 @@ begin
   for k := 1 to nmax div 2 do
     begin
       for i := 1 to nmax - k do //идём от начала к концу, попутно сортируем
-        if m[i] > m[i + 1] then
+        if heapOfSocks[i] > heapOfSocks[i + 1] then
           begin
-            v := m[i];
-            m[i] := m[i + 1];
-            m[i + 1] := v;
+            v := heapOfSocks[i];
+            heapOfSocks[i] := heapOfSocks[i + 1];
+            heapOfSocks[i + 1] := v;
           end;
       for j := nmax - k downto 2 do //возвращаясь назад, сортируем с конца
-        if m[j] < m[j - 1] then
+        if heapOfSocks[j] < heapOfSocks[j - 1] then
           begin
-            v := m[j];
-            m[j] := m[j - 1];
-            m[j - 1] := v;
+            v := heapOfSocks[j];
+            heapOfSocks[j] := heapOfSocks[j - 1];
+            heapOfSocks[j - 1] := v;
           end;
     end;
 end;
 
-procedure findGrail(var a: massive; var grail, x: integer); //2 алгоритма: для чётной и нечётной длины
+procedure findSockInHeap(var heapOfSocks: massive; var sock, position: integer); //2 алгоритма: для чётной и нечётной длины
 var
   left, right {границы поиска}, mid {средний элемент}: integer; 
   found: boolean;
@@ -55,23 +55,23 @@ begin
   while (left <= right) and (not found) do
     begin
       mid := (left + right) div 2;
-      if a[mid] = grail then
+      if heapOfSocks[mid] = sock then
         begin
           found := true;
-          x := mid;
+          position := mid;
         end
-        else if a[mid] < grail then left := mid + 1
+        else if heapOfSocks[mid] < sock then left := mid + 1
           else right := mid - 1;
     end;
 end;
 
-function isInMas(var m: massive; grail: integer): boolean;
+function isInMas(var heapOfSocks: massive; sock: integer): boolean;
 var
   i: integer;
   answer: boolean;
 begin
   for i := 1 to nmax do
-    if m[i] = grail then
+    if heapOfSocks[i] = sock then
       begin
         answer := true;
         break;
@@ -79,29 +79,29 @@ begin
   result := answer;
 end;
 
-procedure printMas(m: massive);
+procedure printMas(heapOfSocks: massive);
 var
   i: integer;
 begin
   for i := 1 to nmax do
-    write (m[i], ' ');
+    write (heapOfSocks[i], ' ');
   writeln();
 end;
 
 BEGIN
   writeln ('Дихотомический (бинарный) поиск');
   writeln();
-  generateMas(m);
-  shakeSort(m);
+  generateMas(heapOfSocks);
+  shakeSort(heapOfSocks);
   write ('Дан массив чисел: ');
-  printMas(m);
+  printMas(heapOfSocks);
   write ('Выберите и введите элемент, который будем искать: ');
-  readln(grail);
-  b := isInMas(m, grail);
-  if b then
+  while not thisSock do //заставляем пользователя вводить число, пока он не введёт элемент массива
     begin
-      findGrail(m, grail, x);
-      writeln('Искомый элемент находится на ', x, ' месте');
-    end
-    else writeln('Введёное число находится вне границ массива');
+       readln(sock);
+        thisSock := isInMas(heapOfSocks, sock);
+        if not thisSock then writeln('Введёное число находится вне границ массива, введите ЧИСЛО ИЗ МАССИВА');
+    end;
+  findSockInHeap(heapOfSocks, sock, position); //ищем индекс элемента в массиве
+  writeln('Искомый элемент находится на ', position, ' месте'); //выводим ответ
 END.
