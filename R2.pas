@@ -1,35 +1,46 @@
 program R2;
 
+//для этого теста k = 1, b = 0
+
 type
+  pointFromFile = record
+    r: real;
+    fi: real;
+  end;
   point = record
-    r: integer;
-    fi: integer;
+    r: real;
+    fi: real;
     x: real;
     y: real;
   end;
+  data = file of pointFromFile;
   coordinates = array of point; 
 
 var
-  n, k, b {к-ты ур-я}: integer;
   a: coordinates;
+  f: data;
   points: boolean;
+  n {кол-во координат}, k, b {к-ты ур-я}: integer;
 
-procedure readPoints(var a: coordinates; n: integer);
+procedure readPoints(f: data; var a: coordinates; var n: integer);
 var
   i: integer;
+  p: pointFromFile;
 begin
-  SetLength(a, n);
-  for i := 0 to n - 1 do
+  reset(f);
+  SetLength(a, 255);
+  while not eof(f) do
     begin
-      write(i + 1, '. r = ');
-      read(a[i].r);
-      write('   fi = ');
-      read(a[i].fi);
-      writeln();
-      
+      read(f, p);
+      a[i].r := p.r;
+      a[i].fi := p.fi;
       a[i].x := a[i].r * cos(a[i].fi); //переводим в декартовы координаты для удобства вычислений
       a[i].y := a[i].r * sin(a[i].fi);
+      inc(i);
     end;
+  n := i + 1;
+  SetLength(a, n);
+  close(f);
 end;
 
 function areBelongs(a: coordinates; n, k, x: integer): boolean;
@@ -44,11 +55,8 @@ begin
 end;
 
 BEGIN
-  writeln('Введите количество точек');
-  readln(n);
-  writeln('Введите координаты точек.');
-  readPoints(a, n);
-    
+  assign(f, 'C:\Users\Альбина\Documents\GitHub\Homeworks\R2.dat');
+      
   writeln ('Введите кэффициенты k и b уравнения прямой y = kx + b:');
   write('k = ');
   read(k);
@@ -56,8 +64,9 @@ BEGIN
   read(b);
   writeln();
   
+  readPoints(f, a, n);
   points := areBelongs(a, n, k, b);
   
-  if points then writeln ('Ура! Все введённые точки лежат на заданной окружности! С:')
-    else writeln ('Что-то пошло не так. Какая-то точка, если не они все, не лежат на заданной окружности :С');
+  if points then writeln ('Ура! Все введённые точки лежат на заданной прямой! С:')
+    else writeln ('Что-то пошло не так. Какая-то точка, если не они все, не лежат на заданной прямой :С');
 END.
