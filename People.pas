@@ -1,75 +1,69 @@
 program people;
 
 const
-  nmax = 100;
+  maxAge = 120;
   
 type 
+  ageDiapason = 1..maxAge;
   person = record
-    name: string;
-    age: integer;
+    name: string[50];
+    age: ageDiapason;
   end;
-  ages = array [1..nmax] of person; //считываем всё в массив и дальше работаем с ним
-  data = file of person; //входные данные
+  ages = array of person; //считываем всё в массив и дальше работаем с ним
+  data = file of person; 
   
 var
-  input: data;
+  f: data;
   a: ages;
+  n: byte;
 
-procedure inputData(input: data; var a: ages);
+procedure input(f: data; var a: ages; var n: byte);
 var
-  i: integer;
+  i: byte;
   p: person;
 begin
-  reset(input);
-  i := 1;
-  while i <= nmax do
+  reset(f);
+  n := 50;
+  SetLength(a, n);
+   for i := 0 to n - 1 do
     begin
-      read(input, p);
+      read(f, p);
       a[i].name := p.name;
       a[i].age := p.age;
-      inc(i);
     end;
+  close (f);
 end;
 
-procedure sortList (var m: ages);
-//шейкерная сортировка
+procedure countSort(var a: ages; n: byte); //сортировка подсчётом
 var
-  i, j, k: integer;
-  v: person;
+  i, j: byte;
+  b: array of person; //для отсортированного массива
+  c: array [0..maxAge - 1] of byte; //для счётчика
 begin
-  for k := 1 to nmax div 2 do
+  SetLength(b, n);
+  for i := 0 to n - 1 do
+    c[a[i].age] := c[a[i].age] + 1;
+  for j := 1 to maxAge - 1 do
+    c[j] := c[j] + c[j - 1];
+  for i := n - 1 downto 0 do
     begin
-      for i := 1 to nmax - k do 
-        if m[i].age > m[i + 1].age then
-          begin
-            v := m[i];
-            m[i] := m[i + 1];
-            m[i + 1] := v;
-          end;
-      for j := nmax - k downto 2 do 
-        if m[j].age < m[j - 1].age then
-          begin
-            v := m[j];
-            m[j] := m[j - 1];
-            m[j - 1] := v;
-          end;
+      c[a[i].age] := c[a[i].age] - 1;
+      b[c[a[i].age]] := a[i];
     end;
+    a := b;
 end;
 
-procedure outputData (var a: ages);
+procedure output(a: ages; n: byte);
 var
-  i: integer;
+  i: byte;
 begin
-  for i := 1 to nmax do
+  for i := 0 to n - 1 do
     writeln (a[i].name, ' ', a[i].age);
 end;
 
 BEGIN
-  assign (input, 'C:\Users\Альбина\Documents\GitHub\Homeworks\peopleList.txt');
-  
-  inputData (input, a);
-  sortList(a);
-  outputData(a);
-  
-  close (input);
+  assign (f, 'C:\Users\Альбина\Documents\GitHub\Homeworks\peopleList.dat');
+  input(f, a, n);
+  countSort(a, n);
+  output(a, n);
 END.
